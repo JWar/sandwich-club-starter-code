@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
+
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -43,7 +46,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -56,7 +59,25 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
-
+    private void populateUI(Sandwich aSandwich) {
+        TextView alsoKnown = findViewById(R.id.also_known_tv);
+        alsoKnown.setText(listToString(aSandwich.getAlsoKnownAs()));
+        TextView ingredients = findViewById(R.id.ingredients_tv);
+        ingredients.setText(listToString(aSandwich.getIngredients()));
+        TextView origin = findViewById(R.id.origin_tv);
+        origin.setText(aSandwich.getPlaceOfOrigin());
+        TextView description = findViewById(R.id.description_tv);
+        description.setText(aSandwich.getDescription());
+    }
+    private String listToString(List<String> aStrings) {
+        if (aStrings != null) {
+            String toReturn="";
+            for (int i = 0;i<aStrings.size();i++) {
+                //Is it that important to avoid +=??
+                toReturn+=aStrings.get(i) + ",";
+            }
+            return toReturn.substring(0,toReturn.length()-1);
+        }
+        return null;
     }
 }
